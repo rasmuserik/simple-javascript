@@ -1,6 +1,6 @@
 {
   "name": "simple-javascript",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "description": "Utility for creating simple apps and libraries, - similar to create-react-app, but for small npm-modules and apps.",
   "icon": "icon.png",
   "homepage": "http://simple-javascript.solsort.com/",
