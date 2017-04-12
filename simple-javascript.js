@@ -1,8 +1,24 @@
-#!/usr/bin/env node
-
 // # Simple JavaScript
 //
-// Utility for making small apps and libraries.
+// In a simple JavaScript library/app, you just create:
+//
+// - `package.json`
+// - `$NAME.js`
+// - `icon.png`
+//
+// Running `simple-javascript release` then increment patch-version in `package.json`, and (auto)generates:
+//
+// - `dist.js` packaged web version of the app with all dependencies included.
+// - `dist.map.js` source map for dist.js
+// - `.babelrc` temporary build config
+// - `webpack-config.js` temporary build config
+// - `README.md` documentation based on name, description and homepage in package.json
+// - `lib.js` babel compiled version of the source, mapping ES6/ES7/JSX to plain ES5.
+// - `index.js` loader used for building dist.*
+// - `index.html` webpage containing element with id=app, and executing exports.main
+// - `.gitignore` ignores unneeded files
+//
+// # Literate code
 //
 
 function throwError(e) {
@@ -64,9 +80,9 @@ async function create() {
 async function release() {
   console.log('building release.');
   let pkg = require(dstName('package.json'));
-  let homepage = pkg.homepage ? '\n***See <' +
-    pkg.homepage + '> for details.***\n\n' : '\n';
-  let readme = autogen + '\n# ' + pkg.name + homepage + pkg.description;
+  let homepage = pkg.homepage ? '\n\n***See <' +
+    pkg.homepage + '> for details.***\n' : '\n';
+  let readme = autogen + '\n# ' + pkg.name + '\n' +pkg.description  + homepage;
 
   write('README.md', readme);
   copyReplace('index.html');
@@ -86,6 +102,7 @@ async function release() {
   exec('node_modules/babel-cli/bin/babel.js ' +
     ' --presets react,es2016,es2017 ' +
     pkg.name + '.js -o lib.js');
+  exec('node_modules/webpack/bin/webpack.js');
   // Increase patch version
 
   pkg.version = pkg.version.replace(/\.[0-9]*$/,
@@ -98,7 +115,7 @@ function write(fname, data) {
 }
 
 function dev() {
-  console.log('`dev` not implemented yet');
+  exec('node_modules/webpack-dev-server/bin/webpack-dev-server.js --hot --inline');
 }
 
 function test() {

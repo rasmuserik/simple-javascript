@@ -1,17 +1,17 @@
 {
   "name": "simple-javascript",
-  "version": "0.0.1",
-  "description": "utility for creating simple apps and libraries, - similar to create-react-app, but for small npm-modules and apps",
+  "version": "0.0.3",
+  "description": "Utility for creating simple apps and libraries, - similar to create-react-app, but for small npm-modules and apps.",
   "icon": "icon.png",
   "main": "dist.js",
   "ldoc": "simple-javascript.js",
   "bin": {
-    "simple-javascript": "simple-javascript.js"
+    "simple-javascript": "run.js"
   },
   "scripts": {
-    "release": "./simple-javascript.js release",
+    "release": "./run.js release",
     "dist": "npm run build && npm run test && increment-patch-version",
-    "dev": "webpack-dev-server",
+    "dev": "./run.js dev",
     "test": "true || electron-testrunner dist.js"
   },
   "repository": {

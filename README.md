@@ -3,6 +3,6 @@
 		DO NOT EDIT 
 -->
 # simple-javascript
-***See <https://simple-javascript.solsort.com/> for details.***
+Utility for creating simple apps and libraries, - similar to create-react-app, but for small npm-modules and apps.
 
-utility for creating simple apps and libraries, - similar to create-react-app, but for small npm-modules and apps
+***See <https://simple-javascript.solsort.com/> for details.***
