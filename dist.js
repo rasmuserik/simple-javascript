@@ -92,13 +92,13 @@ return /******/ (function(modules) { // webpackBootstrap
     fs.writeFileSync(name + '.js', '/' + '/ # ' + name + '\n//\nconsole.log(\'hello\');\n');
 
     console.log('installing dependencies, please wait..');
-    exec('yarn');
+    yield exec('yarn');
 
     release();
-    exec('git init');
-    exec('git add .');
-    exec('git commit -am \'initial commit\'');
-    exec('git remote add origin https://github.com/' + githubUser + '/' + name + '.git');
+    yield exec('git init');
+    yield exec('git add .');
+    yield exec('git commit -am \'initial commit\'');
+    yield exec('git remote add origin https://github.com/' + githubUser + '/' + name + '.git');
     //exec('git push -u origin master');
   });
 
@@ -141,8 +141,8 @@ let release = (() => {
       });
     }
 
-    exec('node_modules/babel-cli/bin/babel.js ' + ' --presets react,es2016,es2017 ' + pkg.name + '.js -o lib.js');
-    exec('node_modules/webpack/bin/webpack.js');
+    yield exec('node_modules/babel-cli/bin/babel.js ' + ' --presets react,es2016,es2017 ' + pkg.name + '.js -o lib.js');
+    yield exec('node_modules/webpack/bin/webpack.js --color');
     // Increase patch version
 
     pkg.version = pkg.version.replace(/\.[0-9]*$/, function (s) {
@@ -153,6 +153,39 @@ let release = (() => {
 
   return function release() {
     return _ref2.apply(this, arguments);
+  };
+})();
+
+let dev = (() => {
+  var _ref3 = _asyncToGenerator(function* () {
+    exec('node_modules/webpack-dev-server/bin/webpack-dev-server.js --hot --inline --color');
+  });
+
+  return function dev() {
+    return _ref3.apply(this, arguments);
+  };
+})();
+
+let test = (() => {
+  var _ref4 = _asyncToGenerator(function* () {
+    console.log('`test` not implemented yet');
+  });
+
+  return function test() {
+    return _ref4.apply(this, arguments);
+  };
+})();
+
+let help = (() => {
+  var _ref5 = _asyncToGenerator(function* () {
+    console.log(`usage:
+  simple-javascript create app-name   # Creates new directory with app.
+  simple-javascript release      # Builds the app in current directory.
+  simple-javascript dev       # starts dev-server in current directory.`);
+  });
+
+  return function help() {
+    return _ref5.apply(this, arguments);
   };
 })();
 
@@ -185,10 +218,17 @@ function throwError(e) {
   throw new Error(e);
 }
 
+function exec(cmd) {
+  return new Promise((resolve, reject) => {
+    let proc = __webpack_require__(!(function webpackMissingModule() { var e = new Error("Cannot find module \"child_process\""); e.code = 'MODULE_NOT_FOUND'; throw e; }())).exec(cmd, err => err ? reject(err) : resolve());
+    proc.stdout.pipe(process.stdout);
+    proc.stderr.pipe(process.stderr);
+  });
+}
+
 let fs = __webpack_require__(!(function webpackMissingModule() { var e = new Error("Cannot find module \"fs\""); e.code = 'MODULE_NOT_FOUND'; throw e; }()));
 let dstName = name => process.cwd() + '/' + name;
 let srcName = name => __dirname + '/' + name;
-let exec = __webpack_require__(!(function webpackMissingModule() { var e = new Error("Cannot find module \"child_process\""); e.code = 'MODULE_NOT_FOUND'; throw e; }())).execSync;
 
 let githubUser = process.env.GITHUB_ORG || process.env.GITHUB_USER || process.env.USER;
 
@@ -200,25 +240,10 @@ function write(fname, data) {
   fs.writeFile(dstName(fname), data, 'utf-8', pass);
 }
 
-function dev() {
-  exec('node_modules/webpack-dev-server/bin/webpack-dev-server.js --hot --inline');
-}
-
-function test() {
-  console.log('`test` not implemented yet');
-}
-
-function help() {
-  console.log(`usage:
-  simple-javascript create app-name   # Creates new directory with app.
-  simple-javascript release      # Builds the app in current directory.
-  simple-javascript dev       # starts dev-server in current directory.`);
-}
-
 function pass() {}
 
 let dispatch = { create, release, dev, test }[process.argv[2]] || help;
-dispatch();
+dispatch().catch(e => process.exit(-1));
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(2), "/"))
 
 /***/ }),

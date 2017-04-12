@@ -1,6 +1,6 @@
 {
   "name": "simple-javascript",
-  "version": "0.0.3",
+  "version": "0.0.1",
   "description": "Utility for creating simple apps and libraries, - similar to create-react-app, but for small npm-modules and apps.",
   "icon": "icon.png",
   "main": "dist.js",
@@ -9,10 +9,10 @@
     "simple-javascript": "run.js"
   },
   "scripts": {
-    "release": "./run.js release",
+    "release": "simple-javascript release",
     "dist": "npm run build && npm run test && increment-patch-version",
-    "dev": "./run.js dev",
-    "test": "true || electron-testrunner dist.js"
+    "dev": "simple-javascript dev",
+    "test": "simple-javascript test"
   },
   "repository": {
     "type": "git",
@@ -38,5 +38,6 @@
   "devDependencies": {
     "electron-testrunner": "^0.1.0",
     "increment-patch-version": "^0.0.1"
-  }
+  },
+  "browser": "dist.js"
 }

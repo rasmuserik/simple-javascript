@@ -25,10 +25,18 @@ function throwError(e) {
   throw new Error(e);
 }
 
+function exec(cmd) {
+  return new Promise((resolve, reject) => {
+    let proc = require('child_process')
+      .exec(cmd, (err => err ? reject(err) : resolve()));
+    proc.stdout.pipe(process.stdout);
+    proc.stderr.pipe(process.stderr);
+  });
+}
+
 let fs = require('fs');
 let dstName = (name) => process.cwd() + '/' + name;
 let srcName = (name) => __dirname + '/' + name;
-let exec = require('child_process').execSync;
 
 let githubUser = process.env.GITHUB_ORG || 
   process.env.GITHUB_USER || process.env.USER;
@@ -48,13 +56,13 @@ async function create() {
     '/' + '/ # ' + name + '\n//\nconsole.log(\'hello\');\n');
 
   console.log('installing dependencies, please wait..');
-  exec('yarn');
+  await exec('yarn');
 
   release();
-  exec('git init');
-  exec('git add .');
-  exec('git commit -am \'initial commit\'');
-  exec('git remote add origin https://github.com/' +
+  await exec('git init');
+  await exec('git add .');
+  await exec('git commit -am \'initial commit\'');
+  await exec('git remote add origin https://github.com/' +
     githubUser + '/' + name + '.git');
   //exec('git push -u origin master');
 };
@@ -66,9 +74,9 @@ async function release() {
     pkg.homepage + '> for details.***\n' : '\n';
   let readme = autogen + '\n# ' + pkg.name + '\n' +pkg.description  + homepage;
   pkg.scripts = Object.assign(pkg.scripts || {}, {
-      release: 'simple-javascript release',
-      dev: 'simple-javascript dev',
-      test: 'simple-javascript test',
+    release: 'simple-javascript release',
+    dev: 'simple-javascript dev',
+    test: 'simple-javascript test',
   });
   pkg.license = pkg.license || "MIT";
   pkg.main = pkg.main || 'lib.js';
@@ -94,10 +102,10 @@ async function release() {
       });
   }
 
-  exec('node_modules/babel-cli/bin/babel.js ' +
+  await exec('node_modules/babel-cli/bin/babel.js ' +
     ' --presets react,es2016,es2017 ' +
     pkg.name + '.js -o lib.js');
-  exec('node_modules/webpack/bin/webpack.js');
+  await exec('node_modules/webpack/bin/webpack.js --color');
   // Increase patch version
 
   pkg.version = pkg.version.replace(/\.[0-9]*$/,
@@ -109,15 +117,15 @@ function write(fname, data) {
   fs.writeFile(dstName(fname), data, 'utf-8', pass);
 }
 
-function dev() {
-  exec('node_modules/webpack-dev-server/bin/webpack-dev-server.js --hot --inline');
+async function dev() {
+  exec('node_modules/webpack-dev-server/bin/webpack-dev-server.js --hot --inline --color');
 }
 
-function test() {
+async function test() {
   console.log('`test` not implemented yet');
 }
 
-function help() {
+async function help() {
   console.log(`usage:
   simple-javascript create app-name   # Creates new directory with app.
   simple-javascript release      # Builds the app in current directory.
@@ -127,4 +135,4 @@ function help() {
 function pass() { }
 
 let dispatch = ({create, release, dev, test})[process.argv[2]] || help;
-dispatch();
+dispatch().catch(e => process.exit(-1));

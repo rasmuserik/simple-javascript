@@ -7,7 +7,7 @@ module.exports = {
   devtool: 'source-map',
   module: {loaders: [{ 
     test: /\.js$/, 
-    exclude: /(webpack.config.js|dist.js|node_modules)/, 
+    exclude: /(dist.js|dist.js.map|node_modules)/, 
     loader: 'babel-loader'
   }]},
   output: {
