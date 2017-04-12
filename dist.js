@@ -245,7 +245,9 @@ body {
     <div>${pkg.description}</div>
   </div>
     <div id=app></div>
+    <script>exports={};module={exports:exports};</script>
     <script src=./dist.js></script>
+    <script>module.exports.main()</script>
     <script src=https://unpkg.com/ldoc></script>
   </body>
 </html>`;
