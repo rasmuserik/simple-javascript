@@ -5,4 +5,4 @@
 # simple-javascript
 Utility for creating simple apps and libraries, - similar to create-react-app, but for small npm-modules and apps.
 
-***See <https://simple-javascript.solsort.com/> for details.***
+***See <http://simple-javascript.solsort.com/> for details.***

@@ -1,8 +1,9 @@
 {
   "name": "simple-javascript",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "Utility for creating simple apps and libraries, - similar to create-react-app, but for small npm-modules and apps.",
   "icon": "icon.png",
+  "homepage": "http://simple-javascript.solsort.com/",
   "main": "dist.js",
   "ldoc": "simple-javascript.js",
   "bin": {
@@ -23,7 +24,6 @@
   "bugs": {
     "url": "https://github.com/solsort/simple-javascript/issues"
   },
-  "homepage": "https://simple-javascript.solsort.com/",
   "dependencies": {
     "babel-cli": "^6.24.1",
     "babel-core": "^6.24.0",
