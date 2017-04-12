@@ -41,13 +41,16 @@ function html(pkg) {
     <meta name="viewport" content="width=device-width">
     <style>
 body {
-  font-family: 'sans-serif';
+  font-family: sans-serif;
 }
     </style>
   </head>
   <body>
-    <h1>${pkg.name}</h1>
+  <div>
+    <img src=icon.png width=32 height=32 style=float:left;margin-right:16px>
+    <strong>${pkg.name}</strong>
     <div>${pkg.description}</div>
+  </div>
     <div id=app></div>
     <script src=./dist.js></script>
     <script src=https://unpkg.com/ldoc></script>
