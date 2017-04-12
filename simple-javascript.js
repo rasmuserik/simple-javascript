@@ -101,7 +101,7 @@ async function create() {
 
 async function release() {
   console.log('building release.');
-  let pkg = require(dstName('package.json'));
+  let pkg = JSON.parse(fs.readFileSync(dstName('package.json'), 'utf-8'));
   let homepage = pkg.homepage ? '\n\n***See <' +
     pkg.homepage + '> for details.***\n' : '\n';
   let readme = autogen + '\n# ' + pkg.name + '\n' +pkg.description  + homepage;

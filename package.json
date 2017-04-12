@@ -1,6 +1,6 @@
 {
   "name": "simple-javascript",
-  "version": "0.0.1",
+  "version": "0.0.3",
   "description": "Utility for creating simple apps and libraries, - similar to create-react-app, but for small npm-modules and apps.",
   "icon": "icon.png",
   "main": "dist.js",
