@@ -9,7 +9,7 @@
     "simple-javascript": "simple-javascript.js"
   },
   "scripts": {
-    "build": "webpack",
+    "release": "./simple-javascript.js release",
     "dist": "npm run build && npm run test && increment-patch-version",
     "dev": "webpack-dev-server",
     "test": "true || electron-testrunner dist.js"
