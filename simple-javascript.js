@@ -39,28 +39,10 @@ async function create() {
   let name = process.argv[3] || throwError('missing project name');
   fs.mkdirSync(name);
   process.chdir(name);
-  let pkg = {
-    name,
-    description: '',
-    homepage: `https://github.com/${githubUser}/${name}`,
-    version: '0.0.0',
-    scripts: {
-      release: 'simple-javascript release',
-      dev: 'simple-javascript dev',
-      test: 'simple-javascript test',
-    },
-    devDependencies: {
-      "simple-javascript": "file:///home/rasmuserik/github/simple-javascript"
-    },
-    repository: "github:${githubUser}/${name}",
-    license: "MIT",
-    main: 'lib.js',
-    browser: 'dist.js',
-  };
 
   write('.travis.yml', 'language: node_js\nnode_js:\n- node\n');
   fs.writeFileSync(dstName('package.json'), 
-    JSON.stringify(pkg));
+    JSON.stringify({name}));
 
   fs.writeFileSync(name + '.js',
     '/' + '/ # ' + name + '\n//\nconsole.log(\'hello\');\n');
@@ -83,6 +65,19 @@ async function release() {
   let homepage = pkg.homepage ? '\n\n***See <' +
     pkg.homepage + '> for details.***\n' : '\n';
   let readme = autogen + '\n# ' + pkg.name + '\n' +pkg.description  + homepage;
+  pkg.scripts = Object.assign(pkg.scripts || {}, {
+      release: 'simple-javascript release',
+      dev: 'simple-javascript dev',
+      test: 'simple-javascript test',
+  });
+  pkg.license = pkg.license || "MIT";
+  pkg.main = pkg.main || 'lib.js';
+  pkg.browser = pkg.browser || 'dist.js';
+  pkg.devDependencies = pkg.devDependencies ||  { 'simple-javascript': '*' };
+  pkg.repository = pkg.repository ||  'github:${githubUser}/${name}';
+  pkg.version = pkg.version || '0.0.0';
+  pkg.homepage = pkg.homepage || `http://${githubUser}.github.io/${name}`;
+  pkg.description = pkg.description || '';
 
   write('README.md', readme);
   copyReplace('index.html');
@@ -125,7 +120,7 @@ function test() {
 function help() {
   console.log(`usage:
   simple-javascript create app-name   # Creates new directory with app.
-  simple-javascript release # Builds the app in current directory.
+  simple-javascript release      # Builds the app in current directory.
   simple-javascript dev       # starts dev-server in current directory.`);
 }
 

@@ -85,27 +85,9 @@ return /******/ (function(modules) { // webpackBootstrap
     let name = process.argv[3] || throwError('missing project name');
     fs.mkdirSync(name);
     process.chdir(name);
-    let pkg = {
-      name,
-      description: '',
-      homepage: `https://github.com/${githubUser}/${name}`,
-      version: '0.0.0',
-      scripts: {
-        release: 'simple-javascript release',
-        dev: 'simple-javascript dev',
-        test: 'simple-javascript test'
-      },
-      devDependencies: {
-        "simple-javascript": "file:///home/rasmuserik/github/simple-javascript"
-      },
-      repository: "github:${githubUser}/${name}",
-      license: "MIT",
-      main: 'lib.js',
-      browser: 'dist.js'
-    };
 
     write('.travis.yml', 'language: node_js\nnode_js:\n- node\n');
-    fs.writeFileSync(dstName('package.json'), JSON.stringify(pkg));
+    fs.writeFileSync(dstName('package.json'), JSON.stringify({ name }));
 
     fs.writeFileSync(name + '.js', '/' + '/ # ' + name + '\n//\nconsole.log(\'hello\');\n');
 
@@ -131,6 +113,19 @@ let release = (() => {
     let pkg = !(function webpackMissingModule() { var e = new Error("Cannot find module \".\""); e.code = 'MODULE_NOT_FOUND'; throw e; }());
     let homepage = pkg.homepage ? '\n\n***See <' + pkg.homepage + '> for details.***\n' : '\n';
     let readme = autogen + '\n# ' + pkg.name + '\n' + pkg.description + homepage;
+    pkg.scripts = Object.assign(pkg.scripts || {}, {
+      release: 'simple-javascript release',
+      dev: 'simple-javascript dev',
+      test: 'simple-javascript test'
+    });
+    pkg.license = pkg.license || "MIT";
+    pkg.main = pkg.main || 'lib.js';
+    pkg.browser = pkg.browser || 'dist.js';
+    pkg.devDependencies = pkg.devDependencies || { 'simple-javascript': '*' };
+    pkg.repository = pkg.repository || 'github:${githubUser}/${name}';
+    pkg.version = pkg.version || '0.0.0';
+    pkg.homepage = pkg.homepage || `http://${githubUser}.github.io/${name}`;
+    pkg.description = pkg.description || '';
 
     write('README.md', readme);
     copyReplace('index.html');
@@ -165,17 +160,32 @@ function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, a
 
 // # Simple JavaScript
 //
-// Utility for making small apps and libraries.
+// In a simple JavaScript library/app, you just create:
+//
+// - `package.json`
+// - `$NAME.js`
+// - `icon.png`
+//
+// Running `simple-javascript release` then increment patch-version in `package.json`, and (auto)generates:
+//
+// - `dist.js` packaged web version of the app with all dependencies included.
+// - `dist.map.js` source map for dist.js
+// - `.babelrc` temporary build config
+// - `webpack-config.js` temporary build config
+// - `README.md` documentation based on name, description and homepage in package.json
+// - `lib.js` babel compiled version of the source, mapping ES6/ES7/JSX to plain ES5.
+// - `index.js` loader used for building dist.*
+// - `index.html` webpage containing element with id=app, and executing exports.main
+// - `.gitignore` ignores unneeded files
+//
+// # Literate code
 //
 
 function throwError(e) {
   throw new Error(e);
 }
 
-let fs;
-if (true) {
-  fs = __webpack_require__(!(function webpackMissingModule() { var e = new Error("Cannot find module \"fs\""); e.code = 'MODULE_NOT_FOUND'; throw e; }()));
-}
+let fs = __webpack_require__(!(function webpackMissingModule() { var e = new Error("Cannot find module \"fs\""); e.code = 'MODULE_NOT_FOUND'; throw e; }()));
 let dstName = name => process.cwd() + '/' + name;
 let srcName = name => __dirname + '/' + name;
 let exec = __webpack_require__(!(function webpackMissingModule() { var e = new Error("Cannot find module \"child_process\""); e.code = 'MODULE_NOT_FOUND'; throw e; }())).execSync;
@@ -191,7 +201,7 @@ function write(fname, data) {
 }
 
 function dev() {
-  console.log('`dev` not implemented yet');
+  exec('node_modules/webpack-dev-server/bin/webpack-dev-server.js --hot --inline');
 }
 
 function test() {
@@ -201,7 +211,7 @@ function test() {
 function help() {
   console.log(`usage:
   simple-javascript create app-name   # Creates new directory with app.
-  simple-javascript release # Builds the app in current directory.
+  simple-javascript release      # Builds the app in current directory.
   simple-javascript dev       # starts dev-server in current directory.`);
 }
 
