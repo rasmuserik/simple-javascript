@@ -115,11 +115,10 @@ let release = (() => {
     let pkg = JSON.parse(fs.readFileSync(dstName('package.json'), 'utf-8'));
     let homepage = pkg.homepage ? '\n\n***See <' + pkg.homepage + '> for details.***\n' : '\n';
     let readme = autogen + '\n# ' + pkg.name + '\n' + pkg.description + homepage;
-    pkg.scripts = Object.assign(pkg.scripts || {}, {
-      release: 'simple-javascript release',
-      dev: 'simple-javascript dev',
-      test: 'simple-javascript test'
-    });
+    pkg.scripts = pkg.scripts || {};
+    pkg.scripts.release = pkg.scripts.release || 'simple-javascript release';
+    pkg.scripts.dev = pkg.scripts.dev || 'simple-javascript dev';
+    pkg.scripts.test = pkg.scripts.test || 'simple-javascript test';
     pkg.license = pkg.license || "MIT";
     pkg.main = pkg.main || 'lib.js';
     pkg.browser = pkg.browser || 'dist.js';
@@ -283,7 +282,7 @@ if (typeof process !== undefined && process.versions && process.versions.node) {
   dispatch().catch(e => process.exit(-1));
 }
 
-exports.main = () => console.log('main');
+exports.main = () => console.log('this app should be run as a cli binary');
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1), "/"))
 
 /***/ }),

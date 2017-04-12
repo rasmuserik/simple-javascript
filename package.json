@@ -1,6 +1,6 @@
 {
   "name": "simple-javascript",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "description": "Utility for creating simple apps and libraries, - similar to create-react-app, but for small npm-modules and apps.",
   "icon": "icon.png",
   "homepage": "http://simple-javascript.solsort.com/",
@@ -9,10 +9,9 @@
     "simple-javascript": "run.js"
   },
   "scripts": {
-    "release": "simple-javascript release",
-    "dist": "npm run build && npm run test && increment-patch-version",
-    "dev": "simple-javascript dev",
-    "test": "simple-javascript test"
+    "release": "./run.js release",
+    "dev": "./run.js dev",
+    "test": "./run.js test"
   },
   "repository": {
     "type": "git",
