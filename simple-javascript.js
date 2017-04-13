@@ -137,7 +137,6 @@ npm-debug.log
 #
 node_modules/
 dist.js.map
-dist.js
 yarn.lock
 npm-debug.log
   `);
