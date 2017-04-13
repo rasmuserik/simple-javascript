@@ -8,7 +8,7 @@ module.exports = {
   devtool: 'source-map',
   module: {loaders: [{ 
     test: /\.js$/, 
-    exclude: /^(dist.js|dist.js.map|node_modules)$/, 
+    exclude: /(dist.js|dist.js.map|node_modules)/, 
     loader: 'babel-loader'
   }]},
   plugins: [
