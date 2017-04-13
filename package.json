@@ -1,6 +1,6 @@
 {
   "name": "simple-javascript",
-  "version": "0.0.15",
+  "version": "0.0.17",
   "description": "Utility for creating simple apps and libraries, - similar to create-react-app, but for small npm-modules and apps.",
   "icon": "icon.png",
   "homepage": "http://simple-javascript.solsort.com/",
@@ -37,5 +37,5 @@
     "electron-testrunner": "^0.1.0"
   },
   "main": "dist.js",
-  "browser": "dist.js"
+  "unpkg": "dist.js"
 }

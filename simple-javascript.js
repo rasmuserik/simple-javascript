@@ -114,7 +114,7 @@ async function release() {
   pkg.scripts.test = pkg.scripts.test || 'simple-javascript test';
   pkg.license = pkg.license || "MIT";
   pkg.main = pkg.main || 'lib.js';
-  pkg.browser = pkg.browser || 'dist.js';
+  pkg.unpkg = pkg.unpkg || 'dist.js';
   pkg.devDependencies = pkg.devDependencies ||  { 'simple-javascript': '*' };
   pkg.repository = pkg.repository ||  'github:${githubUser}/${name}';
   pkg.version = pkg.version || '0.0.0';
