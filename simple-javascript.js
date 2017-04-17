@@ -51,6 +51,7 @@ body {
     <strong>${pkg.name}</strong>
     <div>${pkg.description}</div>
   </div>
+  <hr>
     <div id=app></div>
     <script>exports={};module={exports:exports};</script>
     <script src=./dist.js></script>
