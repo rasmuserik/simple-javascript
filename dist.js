@@ -148,7 +148,6 @@ let release = (() => {
 #
 node_modules/
 dist.js.map
-lib.js
 yarn.lock
 npm-debug.log
 `);
