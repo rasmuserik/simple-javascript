@@ -134,6 +134,9 @@ let release = (() => {
     pkg.homepage = pkg.homepage || `http://${githubUser}.github.io/${pkg.name}`;
     pkg.description = pkg.description || '';
 
+    if (!fs.existsSync('.travis.yml')) {
+      write('.travis.yml', 'language: node_js\n' + 'node_js:\n' + '- node\n');
+    }
     write('README.md', readme);
     write('index.html', html(pkg));
     write('.gitignore', `#
